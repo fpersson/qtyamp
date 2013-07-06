@@ -2,11 +2,14 @@
 
 CServer::CServer(QObject *parent) : QObject(parent){
     m_tcpserver = new QTcpServer(this);
-    m_mediaplayer = new CMediaPlayer();
+    m_udpBroadcast = new QUdpSocket(this);
+    m_mediaplayer = new CMediaPlayer(this);
+    m_broadcastTimer = new QTimer();
     m_mediaplayer->setPlaylist("/home/fredrik/playlist");
 
 
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
+    connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
 
     if(!m_tcpserver->listen(QHostAddress::Any, 1234)){
         qDebug() << "Could not start server.";
@@ -21,6 +24,17 @@ void CServer::newConnection(){
 
     m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack\r\nEnter command: ");
     m_socket->flush();
+}
+
+void CServer::broadcast(int val){
+    qDebug() << "Should broadcast...";
+    m_broadcastTimer->start(10000); //10s
+}
+
+void CServer::braodcastDelayed(){
+    QByteArray datagram = m_mediaplayer->getCurrentTrack().toStdString().c_str();
+    m_udpBroadcast->writeDatagram(datagram.data(), datagram.size(),QHostAddress::Broadcast, 5007);
+    m_broadcastTimer->stop();
 }
 
 void CServer::startRead(){

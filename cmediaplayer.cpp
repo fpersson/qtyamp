@@ -3,9 +3,9 @@
 CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_player = new QMediaPlayer();
     m_playlist = new QMediaPlaylist();
-    connect(m_player, SIGNAL(positionChanged(qint64)), this, SLOT(positonChanged(qint64)));
-    connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
+    connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast(int)));
+    connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
 }
 
 CMediaPlayer::~CMediaPlayer(){
@@ -48,10 +48,6 @@ void CMediaPlayer::shuffle(){
     m_playlist->shuffle();
     m_playlist->setCurrentIndex(0);
     m_player->play();
-}
-
-void CMediaPlayer::positonChanged(qint64 val){
-  //qDebug() << "val=" << val;
 }
 
 /**
