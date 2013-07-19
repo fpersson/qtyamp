@@ -5,17 +5,27 @@ CServer::CServer(QObject *parent) : QObject(parent){
     m_udpBroadcast = new QUdpSocket(this);
     m_mediaplayer = new CMediaPlayer(this);
     m_broadcastTimer = new QTimer();
-    m_mediaplayer->setPlaylist("/home/fredrik/playlist");
+    QString pl_path(QDir::homePath());
+    pl_path.append("/playlist");
+    pl_path = QDir::toNativeSeparators(pl_path);
+    m_mediaplayer->setPlaylist(pl_path);
 
 
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
     connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
 
-    if(!m_tcpserver->listen(QHostAddress::Any, 1234)){
-        qDebug() << "Could not start server.";
+    if(!m_tcpserver->listen(QHostAddress::Any, m_configReader.getTcpPort())){
+        qDebug() << "Server [Failed]";
     }else{
-        qDebug() << "Server is upp and running...";
+        qDebug() << "Server [Ok]";
     }
+}
+
+CServer::~CServer(){
+    delete m_tcpserver;
+    delete m_udpBroadcast;
+    delete m_mediaplayer;
+    delete m_broadcastTimer;
 }
 
 void CServer::newConnection(){
@@ -26,8 +36,7 @@ void CServer::newConnection(){
     m_socket->flush();
 }
 
-void CServer::broadcast(int val){
-    qDebug() << "Should broadcast...";
+void CServer::broadcast(){
     m_broadcastTimer->start(10000); //10s
 }
 
@@ -35,6 +44,7 @@ void CServer::braodcastDelayed(){
     QByteArray datagram = m_mediaplayer->getCurrentTrack().toStdString().c_str();
     m_udpBroadcast->writeDatagram(datagram.data(), datagram.size(),QHostAddress::Broadcast, 5007);
     m_broadcastTimer->stop();
+    qDebug() << "Broadcast [Ok]";
 }
 
 void CServer::startRead(){

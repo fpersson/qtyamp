@@ -4,12 +4,13 @@ CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_player = new QMediaPlayer();
     m_playlist = new QMediaPlaylist();
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
-    connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast(int)));
+    connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
 }
 
 CMediaPlayer::~CMediaPlayer(){
     delete m_player;
+    delete m_playlist;
 }
 
 void CMediaPlayer::playback(){
@@ -51,20 +52,19 @@ void CMediaPlayer::shuffle(){
 }
 
 /**
- * @brief CMediaPlayer::stateChanged the player will contionu to play forever or until stop command is sent.
+ * @brief CMediaPlayer::stateChanged the player will continue to play forever or until stop command is sent.
  * @param state
  */
 void CMediaPlayer::stateChanged(QMediaPlayer::State state){
-  qDebug() << "state=" << state;
   if((state == QMediaPlayer::StoppedState) && (m_playlist->currentIndex() == -1)){
-      qDebug() << "This is the end of the line, will restart";
+      qDebug() << "Restarting playlist [OK]";
       m_playlist->setCurrentIndex(0);
       m_player->play();
   }
 }
 
 void CMediaPlayer::changedMedia(int val){
-  qDebug() << "changed media (" << val << ")";
+  qDebug() << "New media (" << val << ") [Ok]";
 }
 
 /**
@@ -76,7 +76,6 @@ void CMediaPlayer::setPlaylist(QString pl){
 
     if(playListFile.open(QIODevice::ReadOnly)){
         QTextStream in(&playListFile);
-        qDebug() << "Reading " << pl;
         while(!in.atEnd()){
             QString instring = in.readLine();
             QFile song(instring);
@@ -84,8 +83,9 @@ void CMediaPlayer::setPlaylist(QString pl){
         }
         m_playlist->setCurrentIndex(0);
         m_player->setPlaylist(m_playlist);
+        qDebug() << pl << " [Ok]";
     }else{
-        qDebug() << pl << " not found.";
+        qDebug() << pl << " [Failed]";
     }
 }
 

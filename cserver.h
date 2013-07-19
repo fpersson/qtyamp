@@ -25,21 +25,24 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDebug>
+#include <QDir>
 
 #include "cmediaplayer.h"
+#include "configreader.h"
 
 class CServer : public QObject
 {
     Q_OBJECT
 public:
     explicit CServer(QObject *parent = 0);
+    ~CServer();
 
 signals:
 
 public slots:
     void newConnection();
     void startRead();
-    void broadcast(int val);
+    void broadcast();
     void braodcastDelayed();
 
 private:
@@ -49,6 +52,7 @@ private:
     QTimer *m_broadcastTimer;
 
     CMediaPlayer *m_mediaplayer;
+    ConfigReader m_configReader;
 };
 
 #endif // CSERVER_H

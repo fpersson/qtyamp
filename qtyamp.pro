@@ -19,8 +19,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     cserver.cpp \
-    cmediaplayer.cpp
+    cmediaplayer.cpp \
+    configreader.cpp
 
 HEADERS += \
     cserver.h \
-    cmediaplayer.h
+    cmediaplayer.h \
+    configreader.h
