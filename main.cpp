@@ -20,11 +20,11 @@
 
 #include <QCoreApplication>
 #include "cserver.h"
+#include "fqlog.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     QCoreApplication a(argc, argv);
-
+    utils::FQLog::getInstance().init("/.qtyamp/log", "/messages");
     CServer server;
     
     return a.exec();

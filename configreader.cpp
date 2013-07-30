@@ -19,7 +19,7 @@ QString ConfigReader::readFile(QString filename){
         QTextStream ts(&file);
         ret = ts.readLine().trimmed();
     }else{
-        qDebug() << path << " [Failed]";
+        utils::FQLog::getInstance().info("Debug", path+" [Failed]");
     }
     return ret;
 }
@@ -41,9 +41,11 @@ void ConfigReader::createDefaultSettings(){
     QDir dir(m_configpath);
     if(!dir.exists()){
         dir.mkdir(m_configpath);
-        qDebug() << "creating " << m_configpath << "[Ok]";
+        //qDebug() << "creating " << m_configpath << "[Ok]";
+        utils::FQLog::getInstance().info("Debug", "creating "+m_configpath+" [Ok]" );
     }else{
-        qDebug() << m_configpath << " [Ok]";
+        //qDebug() << m_configpath << " [Ok]";
+        utils::FQLog::getInstance().info("Debug", m_configpath+" [Ok]" );
     }
     writeFile("/tcp_port", "1234");
 }

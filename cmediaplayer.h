@@ -23,9 +23,10 @@
 
 #include <QtMultimedia>
 #include <QMediaPlaylist>
-#include <QtDebug>
 #include <QObject>
 #include <QTextStream>
+
+#include "fqlog.h"
 
 /**
  * @brief The CMediaPlayer class

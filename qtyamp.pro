@@ -20,9 +20,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     cserver.cpp \
     cmediaplayer.cpp \
-    configreader.cpp
+    configreader.cpp \
+    fqlog.cpp
 
 HEADERS += \
     cserver.h \
     cmediaplayer.h \
-    configreader.h
+    configreader.h \
+    fqlog.h

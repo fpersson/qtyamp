@@ -57,14 +57,14 @@ void CMediaPlayer::shuffle(){
  */
 void CMediaPlayer::stateChanged(QMediaPlayer::State state){
   if((state == QMediaPlayer::StoppedState) && (m_playlist->currentIndex() == -1)){
-      qDebug() << "Restarting playlist [OK]";
+      utils::FQLog::getInstance().info("Debug","Restarting playlist [OK]");
       m_playlist->setCurrentIndex(0);
       m_player->play();
   }
 }
 
 void CMediaPlayer::changedMedia(int val){
-  qDebug() << "New media (" << val << ") [Ok]";
+  utils::FQLog::getInstance().info("Debug","New media ("+QString::number(val)+") [Ok]");
 }
 
 /**
@@ -83,9 +83,9 @@ void CMediaPlayer::setPlaylist(QString pl){
         }
         m_playlist->setCurrentIndex(0);
         m_player->setPlaylist(m_playlist);
-        qDebug() << pl << " [Ok]";
+        utils::FQLog::getInstance().info("Debug", pl+" [Ok]");
     }else{
-        qDebug() << pl << " [Failed]";
+        utils::FQLog::getInstance().info("Debug", pl+" [Failed]");
     }
 }
 

@@ -15,9 +15,9 @@ CServer::CServer(QObject *parent) : QObject(parent){
     connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
 
     if(!m_tcpserver->listen(QHostAddress::Any, m_configReader.getTcpPort())){
-        qDebug() << "Server [Failed]";
+        utils::FQLog::getInstance().info("Debug", "Server [Failed]");
     }else{
-        qDebug() << "Server [Ok]";
+        utils::FQLog::getInstance().info("Debug", "Server [Ok]");
     }
 }
 
@@ -44,14 +44,14 @@ void CServer::braodcastDelayed(){
     QByteArray datagram = m_mediaplayer->getCurrentTrack().toStdString().c_str();
     m_udpBroadcast->writeDatagram(datagram.data(), datagram.size(),QHostAddress::Broadcast, 5007);
     m_broadcastTimer->stop();
-    qDebug() << "Broadcast [Ok]";
+    utils::FQLog::getInstance().info("Debug", "Broadcast [Ok]");
 }
 
 void CServer::startRead(){
     char buffer[1024] = {0};
     m_socket->read(buffer, m_socket->bytesAvailable());
     QString msg(buffer);
-    qDebug() << msg.trimmed();
+    utils::FQLog::getInstance().info("Debug", msg.trimmed());
     if(msg.trimmed() == "stop"){
         m_socket->write("Stop playback!\r\n");
         m_mediaplayer->stopPlayback();

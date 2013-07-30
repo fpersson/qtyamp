@@ -1,5 +1,5 @@
-#ifndef CSERVER_H
-#define CSERVER_H
+#ifndef FQLOG_H
+#define FQLOG_H
 
 /*
     This program is free software; you can redistribute it and/or
@@ -21,40 +21,48 @@
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
 
-#include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QDebug>
+#include <QString>
+#include <QDateTime>
 #include <QDir>
+#include <QFile>
 
-#include "cmediaplayer.h"
-#include "configreader.h"
-#include "fqlog.h"
+namespace utils{
 
-class CServer : public QObject
+/**
+ * @brief The FQLog class - a non thread safe logger.
+ */
+class FQLog
 {
-    Q_OBJECT
 public:
-    explicit CServer(QObject *parent = 0);
-    ~CServer();
+    static FQLog& getInstance(){
+        static FQLog instance;
+        return instance;
+    }
+    /**
+     * @brief init call init before using the log.
+     * @param dir
+     * @param file
+     */
+    void init(QString dir, QString file);
 
-signals:
-
-public slots:
-    void newConnection();
-    void startRead();
-    void broadcast();
-    void braodcastDelayed();
+    /**
+     * @brief info
+     * @param tag
+     * @param msg
+     */
+    void info(QString tag, QString msg);
 
 private:
-    QTcpServer *m_tcpserver;
-    QTcpSocket *m_socket;
-    QUdpSocket *m_udpBroadcast;
-    QTimer *m_broadcastTimer;
-
-    CMediaPlayer *m_mediaplayer;
-    ConfigReader m_configReader;
+    FQLog(){;}
+    void writeLog(QString msg);
+    void rotateLog();
+    void moveLog(QString srcfile, QString destfile);
+    QString m_logdir;
+    QString m_logfile;
+    int m_numLogs;
 };
 
-#endif // CSERVER_H
+} //namespace
 
+#endif // FQLOG_H
