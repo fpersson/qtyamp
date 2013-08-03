@@ -6,6 +6,7 @@ CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
+    connect(m_player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError(QMediaPlayer::Error)));
 }
 
 CMediaPlayer::~CMediaPlayer(){
@@ -28,6 +29,10 @@ void CMediaPlayer::next(){
 
 void CMediaPlayer::prev(){
     m_playlist->previous();
+}
+
+void CMediaPlayer::handleError(QMediaPlayer::Error error){
+    utils::FQLog::getInstance().info("Debug", "Error code: "+QString::number(error));
 }
 
 QString CMediaPlayer::getCurrentTrack(){

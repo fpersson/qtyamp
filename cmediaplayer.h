@@ -49,6 +49,7 @@ signals:
 public slots:
    void stateChanged(QMediaPlayer::State state);
    void changedMedia(int val);
+   void handleError(QMediaPlayer::Error error);
 
 private:
   QMediaPlayer *m_player;
