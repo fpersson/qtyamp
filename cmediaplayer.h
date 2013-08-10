@@ -27,6 +27,7 @@
 #include <QTextStream>
 
 #include "fqlog.h"
+#include "flaghandler.h"
 
 /**
  * @brief The CMediaPlayer class
@@ -43,7 +44,9 @@ public:
   void shuffle();
   void next();
   void prev();
+  void fromlast();
   QString getCurrentTrack();
+
 signals:
 
 public slots:
@@ -52,8 +55,12 @@ public slots:
    void handleError(QMediaPlayer::Error error);
 
 private:
+   int getLastPlayedTrack();
+   void setLastPlayedTrack(int track);
+
   QMediaPlayer *m_player;
   QMediaPlaylist *m_playlist;
+  utils::FlagHandler m_flagHandler;
 };
 
 #endif // CMEDIAPLAYER_H

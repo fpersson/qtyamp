@@ -1,5 +1,5 @@
-#ifndef CONFIGREADER_H
-#define CONFIGREADER_H
+#ifndef FLAGHANDLER_H
+#define FLAGHANDLER_H
 
 /*
     This program is free software; you can redistribute it and/or
@@ -26,18 +26,20 @@
 #include <QFile>
 #include <QTextStream>
 #include <fqlog.h>
-#include <flaghandler.h>
 
-class ConfigReader
+namespace utils{
+
+class FlagHandler
 {
 public:
-    ConfigReader();
-    int getTcpPort();
-
-
+    FlagHandler(){;}
+    void setBasePath(QString basePath);
+    void writeFile(QString filename, QString value, bool update);
+    QString readFile(QString filename);
 private:
-    void createDefaultSettings(QString path);
-    utils::FlagHandler m_flagHandler;
+    QString m_basePath;
 };
 
-#endif // CONFIGREADER_H
+} //namespace
+
+#endif // FLAGHANDLER_H

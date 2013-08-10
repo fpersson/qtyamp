@@ -32,7 +32,7 @@ void CServer::newConnection(){
     m_socket = m_tcpserver->nextPendingConnection();
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(startRead()));
 
-    m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack\r\nEnter command: ");
+    m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue\r\nEnter command: ");
     m_socket->flush();
 }
 
@@ -69,6 +69,9 @@ void CServer::startRead(){
         m_mediaplayer->prev();
     }else if(msg.trimmed() == "gettrack"){
         m_socket->write(m_mediaplayer->getCurrentTrack().toStdString().c_str());
+    }else if(msg.trimmed() == "continue"){
+        m_socket->write("continue!\r\n");
+        m_mediaplayer->fromlast();
     }else{
         m_socket->write("Please consult the source code or your brain doctor\r\n");
     }

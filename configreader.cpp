@@ -1,55 +1,26 @@
 #include "configreader.h"
 
 ConfigReader::ConfigReader(){
-    m_configpath.append(QDir::homePath());
-    m_configpath.append("/.qtyamp");
+    QString path;
+    path.append(QDir::homePath());
+    path.append("/.qtyamp");
 
-    createDefaultSettings();
+    m_flagHandler.setBasePath(path);
+    createDefaultSettings(path);
 }
 
-QString ConfigReader::readFile(QString filename){
-    QString ret = "";
-    QString path = m_configpath;
-    path.append(filename);
-    path = QDir::toNativeSeparators(path);
-
-    QFile file(path);
-    if(file.exists()){
-        file.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ts(&file);
-        ret = ts.readLine().trimmed();
-    }else{
-        utils::FQLog::getInstance().info("Debug", path+" [Failed]");
-    }
-    return ret;
-}
-
-void ConfigReader::writeFile(QString filename, QString value){
-    QString path = m_configpath;
-    path.append(filename);
-    path = QDir::toNativeSeparators(path);
-    QFile file(path);
-    if(!file.exists()){
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream out(&file);
-        out << value;
-        file.close();
-    }
-}
-
-void ConfigReader::createDefaultSettings(){
-    QDir dir(m_configpath);
+void ConfigReader::createDefaultSettings(QString path){
+    QDir dir(path);
     if(!dir.exists()){
-        dir.mkdir(m_configpath);
-        //qDebug() << "creating " << m_configpath << "[Ok]";
-        utils::FQLog::getInstance().info("Debug", "creating "+m_configpath+" [Ok]" );
+        dir.mkdir(path);
+        utils::FQLog::getInstance().info("Debug", "creating "+path+" [Ok]" );
     }else{
-        //qDebug() << m_configpath << " [Ok]";
-        utils::FQLog::getInstance().info("Debug", m_configpath+" [Ok]" );
+        utils::FQLog::getInstance().info("Debug", path+" [Ok]" );
     }
-    writeFile("/tcp_port", "1234");
+    m_flagHandler.writeFile("/tcp_port", "1234", false);
 }
+
 
 int ConfigReader::getTcpPort(){
-    return readFile("/tcp_port").toInt();
+    return m_flagHandler.readFile("/tcp_port").toInt();
 }

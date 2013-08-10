@@ -66,4 +66,4 @@ void FQLog::moveLog(QString srcfile, QString destfile){
     }
 }
 
-}
+}//namespace

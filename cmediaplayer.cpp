@@ -3,6 +3,11 @@
 CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_player = new QMediaPlayer();
     m_playlist = new QMediaPlaylist();
+    QString path(QDir::homePath());
+    path.append("/.qtyamp");
+
+    m_flagHandler.setBasePath(path);
+
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
@@ -29,6 +34,12 @@ void CMediaPlayer::next(){
 
 void CMediaPlayer::prev(){
     m_playlist->previous();
+}
+
+void CMediaPlayer::fromlast(){
+    m_player->stop();
+    m_playlist->setCurrentIndex(getLastPlayedTrack());
+    m_player->play();
 }
 
 void CMediaPlayer::handleError(QMediaPlayer::Error error){
@@ -70,6 +81,10 @@ void CMediaPlayer::stateChanged(QMediaPlayer::State state){
 
 void CMediaPlayer::changedMedia(int val){
   utils::FQLog::getInstance().info("Debug","New media ("+QString::number(val)+") [Ok]");
+  if(m_player->state() == QMediaPlayer::PlayingState){
+      utils::FQLog::getInstance().info("Debug", "m_player state is PlaingState");
+      setLastPlayedTrack(val);
+  }
 }
 
 /**
@@ -94,3 +109,15 @@ void CMediaPlayer::setPlaylist(QString pl){
     }
 }
 
+int CMediaPlayer::getLastPlayedTrack(){
+    int retval =0;
+    QString value = m_flagHandler.readFile("/last_track");
+    if(value!=""){
+        retval = value.toInt();
+    }
+    return retval;
+}
+
+void CMediaPlayer::setLastPlayedTrack(int track){
+    m_flagHandler.writeFile("/last_track", QString::number(track) , true);
+}
