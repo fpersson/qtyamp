@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QDir>
 
+#include "commandparser.h"
 #include "cmediaplayer.h"
 #include "configreader.h"
 #include "fqlog.h"
@@ -54,6 +55,7 @@ private:
 
     CMediaPlayer *m_mediaplayer;
     ConfigReader m_configReader;
+    CommandParser m_commandParser;
 };
 
 #endif // CSERVER_H

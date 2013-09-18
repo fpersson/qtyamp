@@ -32,7 +32,7 @@ void CServer::newConnection(){
     m_socket = m_tcpserver->nextPendingConnection();
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(startRead()));
 
-    m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue\r\nEnter command: ");
+    m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume\r\nEnter command: ");
     m_socket->flush();
 }
 
@@ -72,8 +72,19 @@ void CServer::startRead(){
     }else if(msg.trimmed() == "continue"){
         m_socket->write("continue!\r\n");
         m_mediaplayer->fromlast();
+    }else if(msg.trimmed() == "getvolume"){
+        m_socket->write(m_mediaplayer->getVolume().toStdString().c_str());
     }else{
-        m_socket->write("Please consult the source code or your brain doctor\r\n");
+        Command cmd;
+        if(m_commandParser.parse(msg.trimmed(), "=", cmd)){
+            if(cmd.cmd=="setvolume"){
+                utils::FQLog::getInstance().info("Debug", "Requested volume is "+cmd.value);
+                m_socket->write("change volume!\r\n");
+                m_mediaplayer->setVolume(cmd.value.toInt());
+            }
+        }else{
+            m_socket->write("Please consult the source code or your brain doctor\r\n");
+        }
     }
     m_socket->flush();
     m_socket->waitForBytesWritten(3000);

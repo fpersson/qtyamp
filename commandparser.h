@@ -1,3 +1,6 @@
+#ifndef COMMANDPARSER_H
+#define COMMANDPARSER_H
+
 /*
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -18,13 +21,22 @@
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
 
-#include <QCoreApplication>
-#include "cserver.h"
-#include "fqlog.h"
+#include <QString>
+#include <QStringList>
 
-int main(int argc, char *argv[]){
-    QCoreApplication a(argc, argv);
-    utils::FQLog::getInstance().init("/.qtyamp/log", "/messages");
-    CServer server;
-    return a.exec();
-}
+#include <fqlog.h>
+
+struct Command{
+    QString cmd;
+    QString value;
+};
+
+class CommandParser
+{
+public:
+    CommandParser();
+    bool parse(QString string, QString delimiter, Command &cmdOut);
+private:
+};
+
+#endif // COMMANDPARSER_H

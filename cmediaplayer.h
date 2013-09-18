@@ -46,6 +46,8 @@ public:
   void prev();
   void fromlast();
   QString getCurrentTrack();
+  QString getVolume();
+  void setVolume(int vol);
 
 signals:
 

@@ -22,11 +22,13 @@ SOURCES += main.cpp \
     cmediaplayer.cpp \
     configreader.cpp \
     fqlog.cpp \
-    flaghandler.cpp
+    flaghandler.cpp \
+    commandparser.cpp
 
 HEADERS += \
     cserver.h \
     cmediaplayer.h \
     configreader.h \
     fqlog.h \
-    flaghandler.h
+    flaghandler.h \
+    commandparser.h

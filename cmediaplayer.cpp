@@ -121,3 +121,25 @@ int CMediaPlayer::getLastPlayedTrack(){
 void CMediaPlayer::setLastPlayedTrack(int track){
     m_flagHandler.writeFile("/last_track", QString::number(track) , true);
 }
+
+QString CMediaPlayer::getVolume(){
+    QString retval;
+    retval.append("volume=");
+    retval.append(QString::number(m_player->volume()));
+    retval.append("\r\n");
+    return retval;
+}
+
+/**
+ * @brief CMediaPlayer::setVolume
+ * @param vol 0-100
+ */
+void CMediaPlayer::setVolume(int vol){
+    if(vol > 100){
+        vol = 100;
+    }
+    if(vol < 0){
+        vol = 0;
+    }
+    m_player->setVolume(vol);
+}
