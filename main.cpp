@@ -17,14 +17,27 @@
     ---
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
+#ifdef Q_OS_ANDROID
+    #include <QtGui/QGuiApplication>
+    #include "qtquick2applicationviewer.h"
+#else
+    #include <QCoreApplication>
+#endif
 
-#include <QCoreApplication>
 #include "cserver.h"
 #include "fqlog.h"
 
 int main(int argc, char *argv[]){
-    QCoreApplication a(argc, argv);
+#ifdef Q_OS_ANDROID
+    //GUI to make android happy?
+    QGuiApplication app(argc, argv);
+    QtQuick2ApplicationViewer viewer;
+    viewer.setMainQmlFile(QStringLiteral("qml/untitled/main.qml"));
+    viewer.showExpanded();
+#else
+    QCoreApplication app(argc, argv);
+#endif
     utils::FQLog::getInstance().init("/.qtyamp/log", "/messages");
     CServer server;
-    return a.exec();
+    return app.exec();
 }

@@ -6,7 +6,12 @@ CServer::CServer(QObject *parent) : QObject(parent){
     m_mediaplayer = new CMediaPlayer(this);
     m_broadcastTimer = new QTimer();
     m_playlistLoaded = false;
-    QString pl_path(QDir::homePath());
+    QString pl_path;
+#ifdef Q_OS_ANDROID
+    pl_path = "/mnt/sdcard";
+#else
+    pl_path = QDir::homePath();
+#endif
     pl_path.append("/playlist");
     pl_path = QDir::toNativeSeparators(pl_path);
 

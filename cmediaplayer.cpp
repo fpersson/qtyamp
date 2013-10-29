@@ -3,7 +3,12 @@
 CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_player = new QMediaPlayer();
     m_playlist = new QMediaPlaylist();
-    QString path(QDir::homePath());
+    QString path;
+#ifdef Q_OS_ANDROID
+    path.append("/mnt/sdcard");
+#else
+    path.append(QDir::homePath());
+#endif
     path.append("/.qtyamp");
 
     m_flagHandler.setBasePath(path);

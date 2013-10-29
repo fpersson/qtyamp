@@ -16,7 +16,6 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp \
     cserver.cpp \
     cmediaplayer.cpp \

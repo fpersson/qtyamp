@@ -14,8 +14,15 @@ void FQLog::info(QString tag, QString msg){
  */
 void FQLog::init(QString dir, QString file){
     m_numLogs = 5;
-    m_logdir = QDir::toNativeSeparators(QDir::homePath().append(dir));
-    m_logfile = QDir::toNativeSeparators(QDir::homePath().append(dir).append(file));
+    QString path;
+#ifdef Q_OS_ANDROID
+    path = "/mnt/sdcard";
+    qDebug() << "Android";
+#else
+    path = QDir::homePath();
+#endif
+    m_logdir = QDir::toNativeSeparators(path.append(dir));
+    m_logfile = QDir::toNativeSeparators(path.append(file));
     QDir logdir(m_logdir);
     if(!logdir.exists()){
         if(!logdir.mkpath(m_logdir)){

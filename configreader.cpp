@@ -2,7 +2,11 @@
 
 ConfigReader::ConfigReader(){
     QString path;
+#ifdef Q_OS_ANDROID
+    path.append("/mnt/sdcard");
+#else
     path.append(QDir::homePath());
+#endif
     path.append("/.qtyamp");
 
     m_flagHandler.setBasePath(path);
