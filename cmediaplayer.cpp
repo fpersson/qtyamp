@@ -43,7 +43,16 @@ void CMediaPlayer::fromlast(){
 }
 
 void CMediaPlayer::handleError(QMediaPlayer::Error error){
-    utils::FQLog::getInstance().info("Debug", "Error code: "+QString::number(error));
+    if(error == QMediaPlayer::ResourceError){
+        utils::FQLog::getInstance().info("Debug", "Error code: QMediaPlayer::ResourceError");
+        int track = m_playlist->currentIndex();
+        m_player->stop();
+        m_playlist->nextIndex();
+        m_playlist->removeMedia(track);
+        m_player->play();
+    }else{
+        utils::FQLog::getInstance().info("Debug", "Error code: "+QString::number(error));
+    }
 }
 
 QString CMediaPlayer::getCurrentTrack(){
