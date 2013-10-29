@@ -56,6 +56,8 @@ private:
     CMediaPlayer *m_mediaplayer;
     ConfigReader m_configReader;
     CommandParser m_commandParser;
+
+    bool m_playlistLoaded;
 };
 
 #endif // CSERVER_H

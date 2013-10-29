@@ -18,7 +18,9 @@ void FQLog::init(QString dir, QString file){
     m_logfile = QDir::toNativeSeparators(QDir::homePath().append(dir).append(file));
     QDir logdir(m_logdir);
     if(!logdir.exists()){
-        logdir.mkdir(m_logdir);
+        if(!logdir.mkpath(m_logdir)){
+            qDebug() << "Could not create: " << m_logdir;
+        }
     }
     rotateLog();
 }

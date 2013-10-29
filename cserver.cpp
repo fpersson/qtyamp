@@ -5,11 +5,17 @@ CServer::CServer(QObject *parent) : QObject(parent){
     m_udpBroadcast = new QUdpSocket(this);
     m_mediaplayer = new CMediaPlayer(this);
     m_broadcastTimer = new QTimer();
+    m_playlistLoaded = false;
     QString pl_path(QDir::homePath());
     pl_path.append("/playlist");
     pl_path = QDir::toNativeSeparators(pl_path);
-    m_mediaplayer->setPlaylist(pl_path);
 
+    if(QFile::exists(pl_path)){
+        m_mediaplayer->setPlaylist(pl_path);
+        m_playlistLoaded = true;
+    }else{
+        utils::FQLog::getInstance().info("Debug", pl_path+" not found");
+    }
 
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
     connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
@@ -32,7 +38,11 @@ void CServer::newConnection(){
     m_socket = m_tcpserver->nextPendingConnection();
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(startRead()));
 
-    m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume\r\nEnter command: ");
+    if(m_playlistLoaded){
+        m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume\r\nEnter command: ");
+    }else{
+        m_socket->write("Welcome to my musicplayer!\r\nNo playlist found....");
+    }
     m_socket->flush();
 }
 
