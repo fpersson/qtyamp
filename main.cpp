@@ -24,10 +24,17 @@
     #include <QCoreApplication>
 #endif
 
+#if QT_VERSION >= 0x050200
+    #include <QtDebug>
+    #include <QCommandLineParser>
+#endif
+
 #include "cserver.h"
 #include "fqlog.h"
 
 int main(int argc, char *argv[]){
+    bool debug = false;
+    QString pl = "";
 #ifdef Q_OS_ANDROID
     //GUI to make android happy?
     QGuiApplication app(argc, argv);
@@ -36,8 +43,29 @@ int main(int argc, char *argv[]){
     viewer.showExpanded();
 #else
     QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName("qtyamp");
+    #if QT_VERSION >= 0x050200
+        QCommandLineParser parser;
+        parser.setApplicationDescription("qtyamp, a mp3player...");
+        parser.addHelpOption();
+        parser.addVersionOption();
+        parser.addPositionalArgument("playlist", QCoreApplication::translate("main", "Playlist to play"));
+
+        //use -d --debug
+        QCommandLineOption debugMode(QStringList() << "d" << "debug", "Display debugmessg at runtime qDebug()");
+        parser.addOption(debugMode);
+
+        parser.process(app);
+        const QStringList args = parser.positionalArguments();
+
+        if(args.size() > 0){
+            pl = args.at(0);
+        }
+
+        debug = parser.isSet(debugMode);
+    #endif
 #endif
-    utils::FQLog::getInstance().init("/.qtyamp/log", "/messages");
-    CServer server;
+    utils::FQLog::getInstance().init("/.qtyamp/log", "/messages", debug);
+    CServer server(pl);
     return app.exec();
 }

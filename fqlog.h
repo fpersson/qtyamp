@@ -44,7 +44,7 @@ public:
      * @param dir
      * @param file
      */
-    void init(QString dir, QString file);
+    void init(QString dir, QString file, bool debugmode);
 
     /**
      * @brief info
@@ -61,6 +61,7 @@ private:
     QString m_logdir;
     QString m_logfile;
     int m_numLogs;
+    bool m_debug;
 };
 
 } //namespace

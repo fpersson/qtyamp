@@ -5,14 +5,17 @@ void FQLog::info(QString tag, QString msg){
     QString timestamp = QDateTime::currentDateTime().toString("yyMMdd - hh:mm:ss");
     QString dbgmsg = "I [";
     dbgmsg.append(timestamp).append("] ").append(tag).append(" - ").append(msg);
-    qDebug() << dbgmsg; //realtime monitoring ;)
+    if(m_debug){
+        qDebug() << dbgmsg; //realtime monitoring ;)
+    }
     writeLog(dbgmsg);
 }
 
 /**
  * @todo check rw permisson for dirs
  */
-void FQLog::init(QString dir, QString file){
+void FQLog::init(QString dir, QString file, bool debugmode){
+    m_debug = debugmode;
     m_numLogs = 5;
     QString path;
 #ifdef Q_OS_ANDROID

@@ -1,6 +1,6 @@
 #include "cserver.h"
 
-CServer::CServer(QObject *parent) : QObject(parent){
+CServer::CServer(QString playlist, QObject *parent) : QObject(parent){
     m_tcpserver = new QTcpServer(this);
     m_udpBroadcast = new QUdpSocket(this);
     m_mediaplayer = new CMediaPlayer(this);
@@ -10,9 +10,16 @@ CServer::CServer(QObject *parent) : QObject(parent){
 #ifdef Q_OS_ANDROID
     pl_path = "/mnt/sdcard";
 #else
-    pl_path = QDir::homePath();
+    if(playlist==""){
+        pl_path = QDir::homePath();
+    }
 #endif
-    pl_path.append("/playlist");
+    if(playlist==""){
+        pl_path.append("/playlist");
+    }else{
+        pl_path = playlist;
+    }
+    utils::FQLog::getInstance().info("Debug", "playlist: "+pl_path);
     pl_path = QDir::toNativeSeparators(pl_path);
 
     if(QFile::exists(pl_path)){

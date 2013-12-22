@@ -36,7 +36,7 @@ class CServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit CServer(QObject *parent = 0);
+    CServer(QString playlist, QObject *parent = 0);
     ~CServer();
 
 signals:
