@@ -1,5 +1,5 @@
-#ifndef FQLOG_H
-#define FQLOG_H
+#ifndef COMMANDPARSER_H
+#define COMMANDPARSER_H
 
 /*
     This program is free software; you can redistribute it and/or
@@ -21,49 +21,22 @@
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
 
-#include <QDebug>
 #include <QString>
-#include <QDateTime>
-#include <QDir>
-#include <QFile>
+#include <QStringList>
 
-namespace utils{
+#include <utils/flog.h>
 
-/**
- * @brief The FQLog class - a non thread safe logger.
- */
-class FQLog
-{
-public:
-    static FQLog& getInstance(){
-        static FQLog instance;
-        return instance;
-    }
-    /**
-     * @brief init call init before using the log.
-     * @param dir
-     * @param file
-     */
-    void init(QString dir, QString file, bool debugmode);
-
-    /**
-     * @brief info
-     * @param tag
-     * @param msg
-     */
-    void info(QString tag, QString msg);
-
-private:
-    FQLog(){;}
-    void writeLog(QString msg);
-    void rotateLog();
-    void moveLog(QString srcfile, QString destfile);
-    QString m_logdir;
-    QString m_logfile;
-    int m_numLogs;
-    bool m_debug;
+struct Command{
+    QString cmd;
+    QString value;
 };
 
-} //namespace
+class CommandParser
+{
+public:
+    CommandParser();
+    bool parse(QString string, QString delimiter, Command &cmdOut);
+private:
+};
 
-#endif // FQLOG_H
+#endif // COMMANDPARSER_H

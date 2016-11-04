@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
-#include <fqlog.h>
+#include <utils/flog.h>
 
 namespace utils{
 

@@ -17,17 +17,17 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    cserver.cpp \
-    cmediaplayer.cpp \
-    configreader.cpp \
-    fqlog.cpp \
-    flaghandler.cpp \
-    commandparser.cpp
+    mediaserver/cserver.cpp \
+    mediaserver/cmediaplayer.cpp \
+    mediaserver/configreader.cpp \
+    utils/flog.cpp \
+    utils/flaghandler.cpp \
+    mediaserver/commandparser.cpp
 
 HEADERS += \
-    cserver.h \
-    cmediaplayer.h \
-    configreader.h \
-    fqlog.h \
-    flaghandler.h \
-    commandparser.h
+    mediaserver/cserver.h \
+    mediaserver/cmediaplayer.h \
+    mediaserver/configreader.h \
+    utils/flog.h \
+    utils/flaghandler.h \
+    mediaserver/commandparser.h

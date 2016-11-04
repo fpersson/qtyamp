@@ -25,8 +25,8 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
-#include <fqlog.h>
-#include <flaghandler.h>
+#include <utils/flog.h>
+#include <utils/flaghandler.h>
 
 class ConfigReader
 {

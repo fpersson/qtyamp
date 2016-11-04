@@ -1,5 +1,5 @@
-#ifndef CSERVER_H
-#define CSERVER_H
+#ifndef CMEDIAPLAYER_H
+#define CMEDIAPLAYER_H
 
 /*
     This program is free software; you can redistribute it and/or
@@ -21,44 +21,48 @@
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
 
+#include <QtMultimedia>
+#include <QMediaPlaylist>
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QDebug>
-#include <QDir>
+#include <QTextStream>
 
-#include "commandparser.h"
-#include "cmediaplayer.h"
-#include "configreader.h"
-#include "fqlog.h"
+#include "utils/flog.h"
+#include "utils/flaghandler.h"
 
-class CServer : public QObject
+/**
+ * @brief The CMediaPlayer class
+ */
+class CMediaPlayer : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    CServer(QString playlist, QObject *parent = 0);
-    ~CServer();
+  explicit CMediaPlayer(QObject *parent = 0);
+  ~CMediaPlayer();
+  void setPlaylist(QString pl);
+  void playback();
+  void stopPlayback();
+  void shuffle();
+  void next();
+  void prev();
+  void fromlast();
+  QString getCurrentTrack();
+  QString getVolume();
+  void setVolume(int vol);
 
 signals:
 
 public slots:
-    void newConnection();
-    void startRead();
-    void broadcast();
-    void braodcastDelayed();
+   void stateChanged(QMediaPlayer::State state);
+   void changedMedia(int val);
+   void handleError(QMediaPlayer::Error error);
 
 private:
-    QTcpServer *m_tcpserver;
-    QTcpSocket *m_socket;
-    QUdpSocket *m_udpBroadcast;
-    QTimer *m_broadcastTimer;
+   int getLastPlayedTrack();
+   void setLastPlayedTrack(int track);
 
-    CMediaPlayer *m_mediaplayer;
-    ConfigReader m_configReader;
-    CommandParser m_commandParser;
-
-    bool m_playlistLoaded;
+  QMediaPlayer *m_player;
+  QMediaPlaylist *m_playlist;
+  utils::FlagHandler m_flagHandler;
 };
 
-#endif // CSERVER_H
-
+#endif // CMEDIAPLAYER_H

@@ -1,5 +1,5 @@
-#ifndef COMMANDPARSER_H
-#define COMMANDPARSER_H
+#ifndef CSERVER_H
+#define CSERVER_H
 
 /*
     This program is free software; you can redistribute it and/or
@@ -21,22 +21,44 @@
     Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
  */
 
-#include <QString>
-#include <QStringList>
+#include <QObject>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QDebug>
+#include <QDir>
 
-#include <fqlog.h>
+#include "commandparser.h"
+#include "cmediaplayer.h"
+#include "configreader.h"
+#include "utils/flog.h"
 
-struct Command{
-    QString cmd;
-    QString value;
-};
-
-class CommandParser
+class CServer : public QObject
 {
+    Q_OBJECT
 public:
-    CommandParser();
-    bool parse(QString string, QString delimiter, Command &cmdOut);
+    CServer(QString playlist, QObject *parent = 0);
+    ~CServer();
+
+signals:
+
+public slots:
+    void newConnection();
+    void startRead();
+    void broadcast();
+    void braodcastDelayed();
+
 private:
+    QTcpServer *m_tcpserver;
+    QTcpSocket *m_socket;
+    QUdpSocket *m_udpBroadcast;
+    QTimer *m_broadcastTimer;
+
+    CMediaPlayer *m_mediaplayer;
+    ConfigReader m_configReader;
+    CommandParser m_commandParser;
+
+    bool m_playlistLoaded;
 };
 
-#endif // COMMANDPARSER_H
+#endif // CSERVER_H
+

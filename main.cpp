@@ -29,8 +29,8 @@
     #include <QCommandLineParser>
 #endif
 
-#include "cserver.h"
-#include "fqlog.h"
+#include "mediaserver/cserver.h"
+#include "utils/flog.h"
 
 int main(int argc, char *argv[]){
     bool debug = false;
