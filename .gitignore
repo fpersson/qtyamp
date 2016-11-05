@@ -19,3 +19,4 @@
 .directory
 *.autosave
 *.user*
+./build
