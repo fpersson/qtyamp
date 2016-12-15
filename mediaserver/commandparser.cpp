@@ -10,7 +10,7 @@ CommandParser::CommandParser(){
  * @param cmdOut
  * @return true is parse works else false.
  */
-bool CommandParser::parse(QString string, QString delimiter, Command &cmdOut){
+bool CommandParser::parse(const QString &string, const QString &delimiter, Command &cmdOut){
     QStringList list;
     list = string.split(delimiter);
     if(list[0] == string){

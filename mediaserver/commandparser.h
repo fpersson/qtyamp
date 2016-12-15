@@ -35,7 +35,7 @@ class CommandParser
 {
 public:
     CommandParser();
-    bool parse(QString string, QString delimiter, Command &cmdOut);
+    bool parse(const QString &string, const QString &delimiter, Command &cmdOut);
 private:
 };
 

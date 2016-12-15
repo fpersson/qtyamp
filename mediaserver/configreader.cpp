@@ -13,7 +13,7 @@ ConfigReader::ConfigReader(){
     createDefaultSettings(path);
 }
 
-void ConfigReader::createDefaultSettings(QString path){
+void ConfigReader::createDefaultSettings(const QString &path){
     QDir dir(path);
     if(!dir.exists()){
         if(dir.mkpath(path)){

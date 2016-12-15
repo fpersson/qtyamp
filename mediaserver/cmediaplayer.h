@@ -18,16 +18,16 @@
     Boston, MA  02110-1301, USA.
 
     ---
-    Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
+    Copyright (C) 2013, 2016 Fredrik Persson <fpersson.se@gmail.com>
  */
-
-#include <QtMultimedia>
-#include <QMediaPlaylist>
 #include <QObject>
+#include <QMediaPlaylist>
 #include <QTextStream>
+#include <QtMultimedia/QtMultimedia>
 
 #include "utils/flog.h"
 #include "utils/flaghandler.h"
+
 
 /**
  * @brief The CMediaPlayer class
@@ -38,7 +38,7 @@ class CMediaPlayer : public QObject
 public:
   explicit CMediaPlayer(QObject *parent = 0);
   ~CMediaPlayer();
-  void setPlaylist(QString pl);
+  void setPlaylist(const QString &pl);
   void playback();
   void stopPlayback();
   void shuffle();
@@ -58,7 +58,7 @@ public slots:
 
 private:
    int getLastPlayedTrack();
-   void setLastPlayedTrack(int track);
+   void setLastPlayedTrack(const int &track);
 
   QMediaPlayer *m_player;
   QMediaPlaylist *m_playlist;

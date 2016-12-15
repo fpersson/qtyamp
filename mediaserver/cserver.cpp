@@ -10,11 +10,11 @@ CServer::CServer(QString playlist, QObject *parent) : QObject(parent){
 #ifdef Q_OS_ANDROID
     pl_path = "/mnt/sdcard";
 #else
-    if(playlist==""){
+    if(playlist.isEmpty()){
         pl_path = QDir::homePath();
     }
 #endif
-    if(playlist==""){
+    if(playlist.isEmpty()){
         pl_path.append("/playlist");
     }else{
         pl_path = playlist;

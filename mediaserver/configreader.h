@@ -36,7 +36,7 @@ public:
 
 
 private:
-    void createDefaultSettings(QString path);
+    void createDefaultSettings(const QString &path);
     utils::FlagHandler m_flagHandler;
 };
 

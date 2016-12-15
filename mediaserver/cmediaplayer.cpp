@@ -105,7 +105,7 @@ void CMediaPlayer::changedMedia(int val){
  * @brief CMediaPlayer::setPlaylist the playlist is just a simple textfile with the absolute path to the song.
  * @param pl
  */
-void CMediaPlayer::setPlaylist(QString pl){
+void CMediaPlayer::setPlaylist(const QString &pl){
     QFile playListFile(pl);
 
     if(playListFile.open(QIODevice::ReadOnly)){
@@ -126,13 +126,13 @@ void CMediaPlayer::setPlaylist(QString pl){
 int CMediaPlayer::getLastPlayedTrack(){
     int retval =0;
     QString value = m_flagHandler.readFile("/last_track");
-    if(value!=""){
+    if(value.isEmpty()){
         retval = value.toInt();
     }
     return retval;
 }
 
-void CMediaPlayer::setLastPlayedTrack(int track){
+void CMediaPlayer::setLastPlayedTrack(const int &track){
     m_flagHandler.writeFile("/last_track", QString::number(track) , true);
 }
 

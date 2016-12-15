@@ -18,7 +18,7 @@
     Boston, MA  02110-1301, USA.
 
     ---
-    Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
+    Copyright (C) 2013, 2016 Fredrik Persson <fpersson.se@gmail.com>
  */
 
 #include <QObject>
@@ -36,7 +36,7 @@ class CServer : public QObject
 {
     Q_OBJECT
 public:
-    CServer(QString playlist, QObject *parent = 0);
+    explicit CServer(QString playlist, QObject *parent = 0);
     ~CServer();
 
 signals:
