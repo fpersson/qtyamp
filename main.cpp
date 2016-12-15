@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         parser.addPositionalArgument("playlist", QCoreApplication::translate("main", "Playlist to play"));
 
         //use -d --debug
-        QCommandLineOption debugMode(QStringList() << "d" << "debug", "Display debugmessg at runtime qDebug()");
+        QCommandLineOption debugMode(QStringList() << "d" << "debug", "Display debug message at runtime qDebug()");
         parser.addOption(debugMode);
 
         parser.process(app);

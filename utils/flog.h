@@ -28,11 +28,20 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QBitArray>
+#include <QLockFile>
+#include <QtCore/QPointer>
 
 
 namespace utils{
 
 unsigned const int MEGABYTE = 1048576; //Mebibyte
+const int STALE_LOCK_TIME = 250; //in ms, used to override QLockFile stale time, qt default is 30s
+
+#ifdef Q_OS_LINUX
+    const QString DEFAULT_LOCK_FILE = "/var/lock/fqlog.lock";
+#else
+    const QString DEFAULT_LOCK_FILE = "fqlog.lock";
+#endif
 
 enum LOG{
     ERROR,
@@ -52,6 +61,8 @@ public:
         static FQLog instance;
         return instance;
     }
+
+    ~FQLog();
     /**
      * @brief init call init before using the log.
      * @param dir
@@ -94,6 +105,12 @@ public:
 
     void clearAllLevels();
 
+    /**
+     * set stale lock time, default is 250ms
+     * @param staleLockTime
+     */
+    void setStaleLockTime(int staleLockTime);
+
 private:
     FQLog();
     void writeLog(QString msg);
@@ -104,6 +121,8 @@ private:
     QString m_logdir;
     QString m_logfile;
     QBitArray m_level;
+
+    QLockFile *m_lockfile;
 
     int m_numLogs;
     bool m_debug;
