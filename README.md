@@ -1,5 +1,8 @@
 # qtyamp
 
+## Status
+[![Build Status](https://travis-ci.org/fpersson/qtyamp.svg?branch=master)](https://travis-ci.org/fpersson/qtyamp)
+
 ## About.
 
 qtyamp is a mp3 player based qt5 (it's not "cute young tramp" as some people might belive).

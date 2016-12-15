@@ -1,0 +1,14 @@
+language: cpp
+compiler:
+    - gcc
+before_install:
+    - sudo apt-add-repository -y ppa:beineri/opt-qt562
+    - sudo apt-get -qq update
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get -qq update
+    - sudo apt-get install gcc-4.8 g++-4.8 qt56-meta-full -y
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+script:
+    - source /opt/qt56/bin/qt56-env.sh
+    - qmake
+    - make
