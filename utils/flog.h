@@ -18,7 +18,7 @@
     Boston, MA  02110-1301, USA.
 
     ---
-    Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
+    Copyright (C) 2013 - 2016, Fredrik Persson <fpersson.se@gmail.com>
  */
 
 #include <QDebug>
@@ -57,46 +57,48 @@ public:
      * @param dir
      * @param file
      */
-    void init(QString dir, QString file, bool debugmode);
+    void init(const QString &dir, const QString &file, const bool &debugmode);
 
     /**
      * @brief info
      * @param tag
      * @param msg
      */
-    void info(QString tag, QString msg);
+    void info(const QString &tag, const QString &msg);
 
     /**
      * @brief error
      * @param tag
      * @param msg
      */
-    void error(QString tag, QString msg);
+    void error(const QString &tag, const QString &msg);
 
     /**
      * @brief warning
      * @param tag
      * @param msg
      */
-    void warning(QString tag, QString msg);
+    void warning(const QString &tag, const QString &msg);
 
     /**
      * @brief setLevel
      * @param level as utils::LOG::ERROR
      */
-    void setLevel(int level);
+    void setLevel(const int &level);
 
     /**
      * @brief disableLevel
      * @param level as utils::LOG::ERROR
      */
-    void disableLevel(int level);
+    void disableLevel(const int &level);
+
+    void clearAllLevels();
 
 private:
     FQLog();
     void writeLog(QString msg);
     void rotateLog();
-    void moveLog(QString srcfile, QString destfile);
+    void moveLog(QString srcfile, const QString &destfile);
 
     QString getTimeStamp();
     QString m_logdir;

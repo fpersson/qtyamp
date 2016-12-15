@@ -16,27 +16,36 @@
  Boston, MA  02110-1301, USA.
 
  ---
- Copyright (C) 2016, Fredrik Persson <fpersson.se@gmail.com>
+ Copyright (C) 2013 - 2016, Fredrik Persson <fpersson.se@gmail.com>
  */
 namespace utils{
 
-void FQLog::setLevel(int level){
+void FQLog::setLevel(const int &level){
     m_level.setBit(level);
 }
 
-void FQLog::info(QString tag, QString msg){
+void FQLog::disableLevel(const int &level){
+    m_level.clearBit(level);
+}
+
+void FQLog::clearAllLevels(){
+    m_level.clear();
+    m_level.resize(LOG::numLevels);
+}
+
+void FQLog::info(const QString &tag, const QString &msg){
     if(m_level.testBit(LOG::ALL) || m_level.testBit(LOG::INFO) ){
         QString dbgmsg = "I [";
         dbgmsg.append(getTimeStamp()).append("] ").append(tag).append(" - ").append(msg);
 
         if(m_debug){
-            qDebug() << dbgmsg; //realtime monitoring ;)
+            qDebug() << dbgmsg;
         }
         writeLog(dbgmsg);
     }
 }
 
-void FQLog::error(QString tag, QString msg){
+void FQLog::error(const QString &tag, const QString &msg){
     if(m_level.testBit(LOG::ALL) || m_level.testBit(LOG::ERROR) ){
         QString dbgmsg = "E [";
         dbgmsg.append(getTimeStamp()).append("] ").append(tag).append(" - ").append(msg);
@@ -47,7 +56,7 @@ void FQLog::error(QString tag, QString msg){
     }
 }
 
-void FQLog::warning(QString tag, QString msg){
+void FQLog::warning(const QString &tag, const QString &msg){
     if(m_level.testBit(LOG::ALL) || m_level.testBit(LOG::WARNING) ){
         QString dbgmsg = "W [";
         dbgmsg.append(getTimeStamp()).append("] ").append(tag).append(" - ").append(msg);
@@ -62,10 +71,7 @@ QString FQLog::getTimeStamp(){
     return QDateTime::currentDateTime().toString("yyMMdd - hh:mm:ss");
 }
 
-/**
- * @todo check rw permisson for dirs
- */
-void FQLog::init(QString dir, QString file, bool debugmode){
+void FQLog::init(const QString &dir, const QString &file, const bool &debugmode){
     m_debug = debugmode;
     m_numLogs = 5;
     QString path;
@@ -127,7 +133,7 @@ void FQLog::rotateLog(){
     }
 }
 
-void FQLog::moveLog(QString srcfile, QString destfile){
+void FQLog::moveLog(QString srcfile, const QString &destfile){
     srcfile = QDir::toNativeSeparators(srcfile);
     QFile file(srcfile);
     if(file.exists()){
