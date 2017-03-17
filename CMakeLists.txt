@@ -12,6 +12,8 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Multimedia REQUIRED)
 find_package(Qt5Network REQUIRED)
 
+add_subdirectory(unittest)
+
 set(SOURCE_FILES
     utils/flog.cpp
     utils/flaghandler.cpp
@@ -22,5 +24,4 @@ set(SOURCE_FILES
 )
 
 add_executable(qtyamp main.cpp ${SOURCE_FILES})
-
 target_link_libraries(qtyamp Qt5::Core Qt5::Network Qt5::Multimedia)
