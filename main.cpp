@@ -31,6 +31,7 @@
 
 #include "mediaserver/cserver.h"
 #include "utils/flog.h"
+#include "utils/pidwriter.h"
 
 int main(int argc, char *argv[]){
     bool debug = false;
@@ -66,6 +67,7 @@ int main(int argc, char *argv[]){
     #endif
 #endif
     utils::FQLog::getInstance().init("/.qtyamp/log", "/messages", debug);
+    utils::PidWriter pidWriter("/.qtyamp", "/pid", QCoreApplication::applicationPid());
     CServer server(pl);
     return app.exec();
 }

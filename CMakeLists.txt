@@ -17,6 +17,7 @@ add_subdirectory(unittest)
 set(SOURCE_FILES
     utils/flog.cpp
     utils/flaghandler.cpp
+    utils/pidwriter.cpp
     mediaserver/cmediaplayer.cpp                                                                                                 
     mediaserver/commandparser.cpp
     mediaserver/configreader.cpp

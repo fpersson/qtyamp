@@ -22,6 +22,7 @@ SOURCES += main.cpp \
     mediaserver/configreader.cpp \
     utils/flog.cpp \
     utils/flaghandler.cpp \
+    utils/pidwriter.cpp \
     mediaserver/commandparser.cpp
 
 HEADERS += \
@@ -30,4 +31,5 @@ HEADERS += \
     mediaserver/configreader.h \
     utils/flog.h \
     utils/flaghandler.h \
+    utils/pidwriter.h \
     mediaserver/commandparser.h
