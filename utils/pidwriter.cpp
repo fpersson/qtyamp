@@ -28,15 +28,14 @@ utils::PidWriter::PidWriter(const QString &path, const QString &file, const qint
 void utils::PidWriter::write(const QString &path, const QString &file, const qint64 &pid) {
 
     utils::FQLog::getInstance().info("UTILS", QString("[PidWriter::write] Pid:%1").arg(QString::number(pid)));
-    QFile pidfile(QString("%1%2%3").arg(QDir::homePath()).arg(path).arg(file));
+    QFile pidfile(QString("%1%2").arg(path).arg(file));
 
     if(pidfile.open(QIODevice::WriteOnly)){
         QTextStream out(&pidfile);
         out << pid;
         pidfile.close();
     }else{
-        utils::FQLog::getInstance().info("UTILS", QString("[PidWriter::write] could not write to: %1%2%3 (pid: %4)")
-                                                    .arg(QDir::homePath())
+        utils::FQLog::getInstance().info("UTILS", QString("[PidWriter::write] could not write to: %1%2 (pid: %3)")
                                                     .arg(path)
                                                     .arg(file)
                                                     .arg(QString::number(pid)));

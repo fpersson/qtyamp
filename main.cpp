@@ -15,7 +15,7 @@
     Boston, MA  02110-1301, USA.
 
     ---
-    Copyright (C) 2013, Fredrik Persson <fpersson.se@gmail.com>
+    Copyright (C) 2013-2017, Fredrik Persson <fpersson.se@gmail.com>
  */
 #ifdef Q_OS_ANDROID
     #include <QtGui/QGuiApplication>
@@ -29,8 +29,11 @@
     #include <QCommandLineParser>
 #endif
 
+#include <QDir>
+
 #include "mediaserver/cserver.h"
 #include "utils/flog.h"
+#include "misc/pathmanager.h"
 #include "utils/pidwriter.h"
 
 int main(int argc, char *argv[]){
@@ -66,8 +69,9 @@ int main(int argc, char *argv[]){
         debug = parser.isSet(debugMode);
     #endif
 #endif
-    utils::FQLog::getInstance().init("/.qtyamp/log", "/messages", debug);
-    utils::PidWriter pidWriter("/.qtyamp", "/pid", QCoreApplication::applicationPid());
+    misc::PathManager::getInstance().init(QString("%1%2").arg(QDir::homePath()).arg("/.qtyamp"));
+    utils::FQLog::getInstance().init(misc::PathManager::getInstance().getLogDir(), "/messages", debug);
+    utils::PidWriter pidWriter(misc::PathManager::getInstance().getTmpDir(), "/pid", QCoreApplication::applicationPid());
     CServer server(pl);
     return app.exec();
 }

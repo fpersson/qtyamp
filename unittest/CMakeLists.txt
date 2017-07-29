@@ -18,7 +18,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Test REQUIRED)
 
 #add_executable(foo foo.cpp)
-set(LIB_SOURCE_FILES ../utils/flog.cpp ../mediaserver/playlistgenerator.cpp)
+set(LIB_SOURCE_FILES
+        ../utils/flog.cpp
+        ../mediaserver/playlistgenerator.cpp
+        ../misc/pathmanager.cpp)
 
 set(SOURCE_FILES testmain.cpp)
 add_executable(unittest ${LIB_SOURCE_FILES} ${SOURCE_FILES})

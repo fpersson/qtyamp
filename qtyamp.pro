@@ -20,6 +20,7 @@ SOURCES += main.cpp \
     mediaserver/cserver.cpp \
     mediaserver/cmediaplayer.cpp \
     mediaserver/configreader.cpp \
+    misc/pathmanager.cpp \
     utils/flog.cpp \
     utils/flaghandler.cpp \
     utils/pidwriter.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     mediaserver/cserver.h \
     mediaserver/cmediaplayer.h \
     mediaserver/configreader.h \
+    misc/pathmanager.h \
     utils/flog.h \
     utils/flaghandler.h \
     utils/pidwriter.h \
