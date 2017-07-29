@@ -33,8 +33,9 @@
 
 #include "mediaserver/cserver.h"
 #include "utils/flog.h"
-#include "misc/pathmanager.h"
 #include "utils/pidwriter.h"
+#include "misc/pathmanager.h"
+#include "misc/defaultsettings.h"
 
 int main(int argc, char *argv[]){
     bool debug = false;
@@ -72,6 +73,7 @@ int main(int argc, char *argv[]){
     misc::PathManager::getInstance().init(QString("%1%2").arg(QDir::homePath()).arg("/.qtyamp"));
     utils::FQLog::getInstance().init(misc::PathManager::getInstance().getLogDir(), "/messages", debug);
     utils::PidWriter pidWriter(misc::PathManager::getInstance().getTmpDir(), "/pid", QCoreApplication::applicationPid());
+    misc::DefaultSettings ds(misc::PathManager::getInstance().getBasePath(), "/settings.ini");
     CServer server(pl);
     return app.exec();
 }

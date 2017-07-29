@@ -19,6 +19,7 @@ set(SOURCE_FILES
     utils/flaghandler.cpp
     utils/pidwriter.cpp
     misc/pathmanager.cpp
+    misc/defaultsettings.cpp
     mediaserver/cmediaplayer.cpp                                                                                                 
     mediaserver/commandparser.cpp
     mediaserver/configreader.cpp
