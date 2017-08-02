@@ -22,7 +22,6 @@ set(SOURCE_FILES
     misc/defaultsettings.cpp
     mediaserver/cmediaplayer.cpp                                                                                                 
     mediaserver/commandparser.cpp
-    mediaserver/configreader.cpp
     mediaserver/cserver.cpp
 )
 

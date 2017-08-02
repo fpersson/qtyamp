@@ -1,12 +1,17 @@
 #include "cserver.h"
 
-CServer::CServer(QString playlist, QObject *parent) : QObject(parent){
+CServer::CServer(const QString& settings, QString playlist, QObject *parent) : QObject(parent){
     m_tcpserver = new QTcpServer(this);
     m_udpBroadcast = new QUdpSocket(this);
     m_mediaplayer = new CMediaPlayer(this);
     m_broadcastTimer = new QTimer();
     m_playlistLoaded = false;
+
+    QString settinfsfile( QString("%1%2").arg(misc::PathManager::getInstance().getBasePath()).arg(settings) );
+    m_settings = new QSettings(settinfsfile, QSettings::IniFormat);
+
     QString pl_path;
+
 #ifdef Q_OS_ANDROID
     pl_path = "/mnt/sdcard";
 #else
@@ -32,14 +37,21 @@ CServer::CServer(QString playlist, QObject *parent) : QObject(parent){
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
     connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
 
-    if(!m_tcpserver->listen(QHostAddress::Any, m_configReader.getTcpPort())){
+    m_settings->beginGroup("Network");
+
+    qint64 tcpport = m_settings->value("tcp_port", 1024).toInt();
+
+    if(!m_tcpserver->listen(QHostAddress::Any, tcpport)){
         utils::FQLog::getInstance().info("Debug", "Server [Failed]");
     }else{
         utils::FQLog::getInstance().info("Debug", "Server [Ok]");
     }
+
+    m_settings->endGroup();
 }
 
 CServer::~CServer(){
+    delete m_settings;
     delete m_tcpserver;
     delete m_udpBroadcast;
     delete m_mediaplayer;

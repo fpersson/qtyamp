@@ -26,17 +26,18 @@
 #include <QTcpSocket>
 #include <QDebug>
 #include <QDir>
+#include <QSettings>
 
 #include "commandparser.h"
 #include "cmediaplayer.h"
-#include "configreader.h"
 #include "utils/flog.h"
+#include "misc/pathmanager.h"
 
 class CServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit CServer(QString playlist, QObject *parent = 0);
+    explicit CServer(const QString& settings, QString playlist, QObject *parent = 0 );
     ~CServer();
 
 signals:
@@ -54,8 +55,8 @@ private:
     QTimer *m_broadcastTimer;
 
     CMediaPlayer *m_mediaplayer;
-    ConfigReader m_configReader;
     CommandParser m_commandParser;
+    QSettings *m_settings;
 
     bool m_playlistLoaded;
 };

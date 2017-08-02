@@ -74,6 +74,6 @@ int main(int argc, char *argv[]){
     utils::FQLog::getInstance().init(misc::PathManager::getInstance().getLogDir(), "/messages", debug);
     utils::PidWriter pidWriter(misc::PathManager::getInstance().getTmpDir(), "/pid", QCoreApplication::applicationPid());
     misc::DefaultSettings ds(misc::PathManager::getInstance().getBasePath(), "/settings.ini");
-    CServer server(pl);
+    CServer server("/settings.ini", pl);
     return app.exec();
 }
