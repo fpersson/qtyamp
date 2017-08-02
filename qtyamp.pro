@@ -19,21 +19,17 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mediaserver/cserver.cpp \
     mediaserver/cmediaplayer.cpp \
-    mediaserver/configreader.cpp \
     misc/pathmanager.cpp \
     misc/defaultsettings.cpp \
     utils/flog.cpp \
-    utils/flaghandler.cpp \
     utils/pidwriter.cpp \
     mediaserver/commandparser.cpp
 
 HEADERS += \
     mediaserver/cserver.h \
     mediaserver/cmediaplayer.h \
-    mediaserver/configreader.h \
     misc/pathmanager.h \
     misc/defaultsettings.h \
     utils/flog.h \
-    utils/flaghandler.h \
     utils/pidwriter.h \
     mediaserver/commandparser.h
