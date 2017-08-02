@@ -19,6 +19,7 @@ namespace misc {
 
             settings->beginGroup("Playlist");
             settings->setValue("playlist", "/path/to/playlist");
+            settings->setValue("last_track", 0);
             settings->setValue("shuffle", true);
             settings->setValue("volume", 100);
             settings->endGroup();

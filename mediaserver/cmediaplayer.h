@@ -18,16 +18,16 @@
     Boston, MA  02110-1301, USA.
 
     ---
-    Copyright (C) 2013, 2016 Fredrik Persson <fpersson.se@gmail.com>
+    Copyright (C) 2013 - 2017 Fredrik Persson <fpersson.se@gmail.com>
  */
 #include <QObject>
 #include <QMediaPlaylist>
 #include <QTextStream>
 #include <QtMultimedia/QtMultimedia>
+#include <QSettings>
 
 #include "utils/flog.h"
-#include "utils/flaghandler.h"
-
+#include "misc/pathmanager.h"
 
 /**
  * @brief The CMediaPlayer class
@@ -36,33 +36,34 @@ class CMediaPlayer : public QObject
 {
   Q_OBJECT
 public:
-  explicit CMediaPlayer(QObject *parent = 0);
-  ~CMediaPlayer();
-  void setPlaylist(const QString &pl);
-  void playback();
-  void stopPlayback();
-  void shuffle();
-  void next();
-  void prev();
-  void fromlast();
-  QString getCurrentTrack();
-  QString getVolume();
-  void setVolume(int vol);
+    explicit CMediaPlayer(QObject *parent = 0);
+    ~CMediaPlayer();
+    void setPlaylist(const QString &pl);
+    void playback();
+    void stopPlayback();
+    void shuffle();
+    void next();
+    void prev();
+    void fromlast();
+    QString getCurrentTrack();
+    QString getVolume();
+    void setVolume(int vol);
 
 signals:
 
 public slots:
-   void stateChanged(QMediaPlayer::State state);
-   void changedMedia(int val);
-   void handleError(QMediaPlayer::Error error);
+    void stateChanged(QMediaPlayer::State state);
+    void changedMedia(int val);
+    void handleError(QMediaPlayer::Error error);
 
 private:
-   int getLastPlayedTrack();
-   void setLastPlayedTrack(const int &track);
+    int getLastPlayedTrack();
+    void setLastPlayedTrack(const int &track);
 
-  QMediaPlayer *m_player;
-  QMediaPlaylist *m_playlist;
-  utils::FlagHandler m_flagHandler;
+    QMediaPlayer *m_player;
+    QMediaPlaylist *m_playlist;
+    QSettings *m_settings;
+    //utils::FlagHandler m_flagHandler;
 };
 
 #endif // CMEDIAPLAYER_H

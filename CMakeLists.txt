@@ -16,7 +16,6 @@ add_subdirectory(unittest)
 
 set(SOURCE_FILES
     utils/flog.cpp
-    utils/flaghandler.cpp
     utils/pidwriter.cpp
     misc/pathmanager.cpp
     misc/defaultsettings.cpp

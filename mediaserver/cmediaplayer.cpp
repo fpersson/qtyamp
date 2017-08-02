@@ -3,15 +3,9 @@
 CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_player = new QMediaPlayer();
     m_playlist = new QMediaPlaylist();
-    QString path;
-#ifdef Q_OS_ANDROID
-    path.append("/mnt/sdcard");
-#else
-    path.append(QDir::homePath());
-#endif
-    path.append("/.qtyamp");
-
-    m_flagHandler.setBasePath(path);
+    QString path = misc::PathManager::getInstance().getBasePath();
+    QString settinfsfile( QString("%1%2").arg(misc::PathManager::getInstance().getBasePath()).arg("/settings.ini") );
+    m_settings = new QSettings(settinfsfile, QSettings::IniFormat);
 
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
@@ -20,6 +14,7 @@ CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
 }
 
 CMediaPlayer::~CMediaPlayer(){
+    delete m_settings;
     delete m_player;
     delete m_playlist;
 }
@@ -114,6 +109,7 @@ void CMediaPlayer::setPlaylist(const QString &pl){
             QString instring = in.readLine();
             QFile song(instring);
             m_playlist->addMedia(QUrl::fromLocalFile(song.fileName()));
+            utils::FQLog::getInstance().info("Debug", "Track: "+QUrl::fromLocalFile(song.fileName()).toString());
         }
         m_playlist->setCurrentIndex(0);
         m_player->setPlaylist(m_playlist);
@@ -125,15 +121,19 @@ void CMediaPlayer::setPlaylist(const QString &pl){
 
 int CMediaPlayer::getLastPlayedTrack(){
     int retval =0;
-    QString value = m_flagHandler.readFile("/last_track");
-    if(value.isEmpty()){
-        retval = value.toInt();
-    }
+
+    m_settings->beginGroup("Playlist");
+    retval = m_settings->value("last_track", 1024).toInt(); //m_flagHandler.readFile("/last_track");
+    m_settings->endGroup();
+
     return retval;
 }
 
 void CMediaPlayer::setLastPlayedTrack(const int &track){
-    m_flagHandler.writeFile("/last_track", QString::number(track) , true);
+    m_settings->beginGroup("Playlist");
+    m_settings->setValue("last_track", track); //m_flagHandler.readFile("/last_track");
+    m_settings->endGroup();
+    //m_flagHandler.writeFile("/last_track", QString::number(track) , true);
 }
 
 QString CMediaPlayer::getVolume(){
