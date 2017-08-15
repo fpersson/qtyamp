@@ -7,6 +7,10 @@ CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     QString settinfsfile( QString("%1%2").arg(misc::PathManager::getInstance().getBasePath()).arg("/settings.ini") );
     m_settings = new QSettings(settinfsfile, QSettings::IniFormat);
 
+    m_settings->beginGroup("Playlist");
+    setVolume(m_settings->value("volume", 100).toInt());
+    m_settings->endGroup();
+
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
@@ -123,7 +127,7 @@ int CMediaPlayer::getLastPlayedTrack(){
     int retval =0;
 
     m_settings->beginGroup("Playlist");
-    retval = m_settings->value("last_track", 1024).toInt(); //m_flagHandler.readFile("/last_track");
+    retval = m_settings->value("last_track", 0).toInt();
     m_settings->endGroup();
 
     return retval;
@@ -131,9 +135,8 @@ int CMediaPlayer::getLastPlayedTrack(){
 
 void CMediaPlayer::setLastPlayedTrack(const int &track){
     m_settings->beginGroup("Playlist");
-    m_settings->setValue("last_track", track); //m_flagHandler.readFile("/last_track");
+    m_settings->setValue("last_track", track);
     m_settings->endGroup();
-    //m_flagHandler.writeFile("/last_track", QString::number(track) , true);
 }
 
 QString CMediaPlayer::getVolume(){
@@ -155,5 +158,11 @@ void CMediaPlayer::setVolume(int vol){
     if(vol < 0){
         vol = 0;
     }
+
     m_player->setVolume(vol);
+
+    m_settings->beginGroup("Playlist");
+    m_settings->setValue("volume", vol);
+    m_settings->endGroup();
+
 }
