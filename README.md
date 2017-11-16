@@ -23,7 +23,9 @@ Escape character is '^]'.
 
 Welcome to my musicplayer!
 
-Valid commads are start|stop|shuffle|next|prev|gettrack|continue
+Valid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume|playdir
+
+playdir: replace the current playlist wit all tracks in dir and subdirs.
 
 Enter command:
 
@@ -38,6 +40,9 @@ udp_broadcast=true
 playlist=/path/to/playlist
 shuffle=true
 volume=75
+
+[Storage]
+external=/mnt/nas/musik
 ```
 
 ## How to build

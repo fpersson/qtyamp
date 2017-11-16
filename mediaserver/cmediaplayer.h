@@ -39,6 +39,7 @@ public:
     explicit CMediaPlayer(QObject *parent = 0);
     ~CMediaPlayer();
     void setPlaylist(const QString &pl);
+    void setPlaylist(const QStringList &pl);
     void playback();
     void stopPlayback();
     void shuffle();

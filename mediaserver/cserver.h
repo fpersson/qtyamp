@@ -32,6 +32,7 @@
 #include "cmediaplayer.h"
 #include "utils/flog.h"
 #include "misc/pathmanager.h"
+#include "playlistgenerator.h"
 
 class CServer : public QObject
 {

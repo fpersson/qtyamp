@@ -23,6 +23,7 @@ SOURCES += main.cpp \
     misc/defaultsettings.cpp \
     utils/flog.cpp \
     utils/pidwriter.cpp \
+    mediaserver/playlistgenerator.cpp \
     mediaserver/commandparser.cpp
 
 HEADERS += \
@@ -32,4 +33,5 @@ HEADERS += \
     misc/defaultsettings.h \
     utils/flog.h \
     utils/pidwriter.h \
+    mediaserver/playlistgenerator.h \
     mediaserver/commandparser.h

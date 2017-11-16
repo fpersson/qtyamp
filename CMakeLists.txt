@@ -22,6 +22,7 @@ set(SOURCE_FILES
     mediaserver/cmediaplayer.cpp                                                                                                 
     mediaserver/commandparser.cpp
     mediaserver/cserver.cpp
+    mediaserver/playlistgenerator.cpp
 )
 
 add_executable(qtyamp main.cpp ${SOURCE_FILES})

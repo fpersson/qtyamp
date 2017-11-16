@@ -27,12 +27,14 @@ CServer::CServer(const QString& settings, QString playlist, QObject *parent) : Q
     utils::FQLog::getInstance().info("Debug", "playlist: "+pl_path);
     pl_path = QDir::toNativeSeparators(pl_path);
 
+
     if(QFile::exists(pl_path)){
         m_mediaplayer->setPlaylist(pl_path);
         m_playlistLoaded = true;
     }else{
         utils::FQLog::getInstance().info("Debug", pl_path+" not found");
     }
+
 
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
     connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
@@ -63,7 +65,7 @@ void CServer::newConnection(){
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(startRead()));
 
     if(m_playlistLoaded){
-        m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume\r\nEnter command: ");
+        m_socket->write("Welcome to my musicplayer!\r\nValid commads are start|stop|shuffle|next|prev|gettrack|continue|getvolume|playdir\r\nEnter command: ");
     }else{
         m_socket->write("Welcome to my musicplayer!\r\nNo playlist found....");
     }
@@ -103,9 +105,29 @@ void CServer::startRead(){
         m_mediaplayer->prev();
     }else if(msg.trimmed() == "gettrack"){
         m_socket->write(m_mediaplayer->getCurrentTrack().toStdString().c_str());
-    }else if(msg.trimmed() == "continue"){
+    }else if(msg.trimmed() == "continue") {
         m_socket->write("continue!\r\n");
         m_mediaplayer->fromlast();
+    }else if(msg.trimmed() == "playdir"){
+        m_socket->write("playdir!\r\n");
+        m_mediaplayer->stopPlayback();
+
+        m_settings->beginGroup("Storage");
+
+        QString external = QDir::toNativeSeparators(m_settings->value("external").toString());
+
+        if(QFile::exists(external)){
+            QStringList filter(".mp3");
+            PlaylistGenerator playlistGenerator;
+            QStringList tmpPl = playlistGenerator.listFiles(external, filter);
+            m_mediaplayer->setPlaylist(tmpPl);
+            m_playlistLoaded = true;
+            utils::FQLog::getInstance().info("Debug", QString("%1 %2").arg(external).arg("found."));
+        }else{
+            utils::FQLog::getInstance().info("Debug", QString("%1 %2").arg(external).arg("not found."));
+        }
+
+        m_mediaplayer->playback();
     }else if(msg.trimmed() == "getvolume"){
         m_socket->write(m_mediaplayer->getVolume().toStdString().c_str());
     }else{

@@ -123,6 +123,21 @@ void CMediaPlayer::setPlaylist(const QString &pl){
     }
 }
 
+void CMediaPlayer::setPlaylist(const QStringList &pl){
+
+    for(int i=0; i < pl.size(); ++i){
+        QFile track(pl.at(i));
+        m_playlist->addMedia(QUrl::fromLocalFile(track.fileName()));
+        utils::FQLog::getInstance().info("Debug", "Track: "+QUrl::fromLocalFile(track.fileName()).toString());
+    }
+
+    m_playlist->setCurrentIndex(0);
+    m_player->setPlaylist(m_playlist);
+    utils::FQLog::getInstance().info("Debug", "playlist [Ok]");
+}
+
+
+
 int CMediaPlayer::getLastPlayedTrack(){
     int retval =0;
 
