@@ -2,9 +2,14 @@
 
 CServer::CServer(const QString& settings, QString playlist, QObject *parent) : QObject(parent){
     m_tcpserver = new QTcpServer(this);
-    m_udpBroadcast = new QUdpSocket(this);
     m_mediaplayer = new CMediaPlayer(this);
-    m_broadcastTimer = new QTimer();
+    m_localServer = new QLocalServer(this);
+
+    if(!m_localServer->listen("qtyamp.getTrack")){
+        utils::FQLog::getInstance().info("Debug", "Error: "+m_localServer->errorString());
+        m_localServer->close();
+    }
+
     m_playlistLoaded = false;
 
     QString settinfsfile( QString("%1%2").arg(misc::PathManager::getInstance().getBasePath()).arg(settings) );
@@ -37,7 +42,7 @@ CServer::CServer(const QString& settings, QString playlist, QObject *parent) : Q
 
 
     connect(m_tcpserver, SIGNAL(newConnection()), this, SLOT(newConnection()));
-    connect(m_broadcastTimer, SIGNAL(timeout()), this, SLOT(braodcastDelayed()));
+    connect(m_localServer, SIGNAL(newConnection()), this, SLOT(getTrack()));
 
     m_settings->beginGroup("Network");
 
@@ -55,9 +60,10 @@ CServer::CServer(const QString& settings, QString playlist, QObject *parent) : Q
 CServer::~CServer(){
     delete m_settings;
     delete m_tcpserver;
-    delete m_udpBroadcast;
+    //delete m_udpBroadcast;
     delete m_mediaplayer;
-    delete m_broadcastTimer;
+    //delete m_broadcastTimer;
+    delete m_localServer;
 }
 
 void CServer::newConnection(){
@@ -72,15 +78,17 @@ void CServer::newConnection(){
     m_socket->flush();
 }
 
-void CServer::broadcast(){
-    m_broadcastTimer->start(10000); //10s
-}
+void CServer::getTrack() {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << m_mediaplayer->getCurrentTrack().toStdString().c_str();
 
-void CServer::braodcastDelayed(){
-    QByteArray datagram = m_mediaplayer->getCurrentTrack().toStdString().c_str();
-    m_udpBroadcast->writeDatagram(datagram.data(), datagram.size(),QHostAddress::Broadcast, 5007);
-    m_broadcastTimer->stop();
-    utils::FQLog::getInstance().info("Debug", "Broadcast [Ok]");
+    QLocalSocket *localSocket = m_localServer->nextPendingConnection();
+    connect(localSocket, SIGNAL(disconnected()), localSocket, SLOT(deleteLater()));
+
+    localSocket->write(block);
+    localSocket->flush();
+    localSocket->disconnectFromServer();
 }
 
 void CServer::startRead(){

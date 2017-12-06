@@ -46,14 +46,12 @@ signals:
 public slots:
     void newConnection();
     void startRead();
-    void broadcast();
-    void braodcastDelayed();
+    void getTrack();
 
 private:
     QTcpServer *m_tcpserver;
     QTcpSocket *m_socket;
-    QUdpSocket *m_udpBroadcast;
-    QTimer *m_broadcastTimer;
+    QLocalServer *m_localServer;
 
     CMediaPlayer *m_mediaplayer;
     CommandParser m_commandParser;

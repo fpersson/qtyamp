@@ -34,7 +34,6 @@ You can find settings.ini in ~/.qtyamp, all settings are not implemented yet
 ```
 [Network]
 tcp_port=1234
-udp_broadcast=true
 
 [Playlist]
 playlist=/path/to/playlist

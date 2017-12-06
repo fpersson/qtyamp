@@ -12,7 +12,7 @@ CMediaPlayer::CMediaPlayer(QObject *parent) : QObject(parent) {
     m_settings->endGroup();
 
     connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(changedMedia(int)));
-    connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
+    //connect(m_playlist, SIGNAL(currentIndexChanged(int)), parent, SLOT(broadcast()));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
     connect(m_player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError(QMediaPlayer::Error)));
 }
